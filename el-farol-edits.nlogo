@@ -46,6 +46,7 @@ to setup
   ;; can change which of this "bag of strategies" they use every tick
   create-turtles 100 [
     set color white
+    set reward 0
     move-to-empty-one-of home-patches
     set strategies n-values number-strategies [random-strategy]
     set best-strategy first strategies
@@ -64,6 +65,7 @@ to go
   ask turtles [
     set prediction predict-attendance best-strategy sublist history 0 memory-size
     set attend? (prediction <= overcrowding-threshold)  ;; true or false
+    set color scale-color red reward (max [reward] of turtles + 1) 0
   ]
   ;; depending on their decision, the agents go to the bar or stay at home
   ask turtles [
@@ -75,8 +77,14 @@ to go
 
   ;; if the bar is crowded indicate that in the view
   set attendance count turtles-on bar-patches
-  if attendance > overcrowding-threshold [
+
+  ifelse attendance > overcrowding-threshold [
     ask crowded-patch [ set plabel "CROWDED" ]
+  ]
+  [
+    ask turtles with [ attend? ] [
+      set reward reward + 1
+    ]
   ]
   ;; update the attendance history
   ;; remove oldest attendance and prepend latest attendance
