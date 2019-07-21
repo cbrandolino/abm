@@ -248,25 +248,6 @@ number-strategies
 NIL
 HORIZONTAL
 
-PLOT
-11
-196
-285
-408
-Bar Attendance
-Time
-Attendance
-0.0
-10.0
-0.0
-100.0
-true
-false
-"" ""
-PENS
-"attendance" 1.0 0 -16777216 true "" "plot attendance"
-"threshold" 1.0 0 -2674135 true "" ";; plot a threshold line -- an attendance level above this line makes the bar\n;; is unappealing, but below this line is appealing\nplot-pen-reset\nplotxy 0 overcrowding-threshold\nplotxy plot-x-max overcrowding-threshold"
-
 SLIDER
 41
 107
@@ -281,6 +262,87 @@ overcrowding-threshold
 1
 NIL
 HORIZONTAL
+
+MONITOR
+14
+409
+104
+454
+Max reward
+max [reward] of turtles
+17
+1
+11
+
+MONITOR
+110
+410
+187
+455
+Min reward
+min [reward] of turtles
+17
+1
+11
+
+MONITOR
+12
+455
+107
+500
+Mean reward
+mean [reward] of turtles
+17
+1
+11
+
+MONITOR
+110
+455
+185
+500
+Median reward
+median [reward] of turtles
+17
+1
+11
+
+PLOT
+30
+200
+230
+350
+plot 1
+time
+attendance
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot attendance"
+"pen-1" 1.0 0 -2674135 true "" "plot-pen-reset\nplotxy 0 overcrowding-threshold\nplotxy plot-x-max overcrowding-threshold"
+
+PLOT
+245
+455
+445
+605
+histogram of rewards
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" "set-plot-y-range 0 1\nset-plot-x-range -1 max [reward] of turtles"
+PENS
+"default" 1.0 1 -16777216 true "" "histogram [ reward ] of turtles"
 
 @#$#@#$#@
 ## ACKNOWLEDGMENT
