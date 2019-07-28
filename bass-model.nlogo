@@ -5,7 +5,7 @@ turtles-own [
 to setup
   clear-all
   set-default-shape turtles "person"
-  create-turtles num-agents [
+  crt num-agents [
     setxy random-xcor random-ycor
     set adoption? false
     set color blue
@@ -14,11 +14,22 @@ to setup
 end
 
 to go
-  ask turtles [
-    set adoption? (random 2 = 1)
-    if adoption? [ set color red ]
+  ask turtles [ adopt ]
+  if count turtles with [adoption?] = count turtles [
+    stop
   ]
+  tick
 end
+
+to adopt
+  set adoption? (
+    adoption? or
+    (random-float 1.0 < broadcast-influence) or
+    (random-float 1.0 < (social-influence * (count turtles with [adoption?] / count turtles)))
+   )
+  if adoption? [ set color red ]
+end
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -48,10 +59,10 @@ ticks
 30.0
 
 SLIDER
-25
-52
-197
-85
+14
+109
+186
+142
 num-agents
 num-agents
 0
@@ -63,10 +74,10 @@ NIL
 HORIZONTAL
 
 BUTTON
-41
-125
-107
-158
+14
+144
+80
+177
 NIL
 setup
 NIL
@@ -80,13 +91,13 @@ NIL
 1
 
 BUTTON
-127
-116
-190
-149
+123
+144
+186
+177
 NIL
 go
-T
+NIL
 1
 T
 OBSERVER
@@ -95,6 +106,36 @@ NIL
 NIL
 NIL
 1
+
+SLIDER
+16
+35
+195
+68
+broadcast-influence
+broadcast-influence
+0
+1
+0.2
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+16
+75
+188
+108
+social-influence
+social-influence
+0
+1
+0.9
+0.1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
