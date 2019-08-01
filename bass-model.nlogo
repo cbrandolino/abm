@@ -8,28 +8,44 @@ to setup
   crt num-agents [
     setxy random-xcor random-ycor
     set adoption? false
+    set color white
+  ]
+
+  ask turtles [
+    create-link-with one-of other turtles
+  ]
+
+  reset-ticks
+end
+
+to reset
+  ask turtles [
+    set adoption? false
     set color blue
   ]
-  reset-ticks
 end
 
 to go
   ask turtles [ adopt ]
-  if count turtles with [adoption?] = count turtles [
+  if not any? turtles with [not adoption?] [
     stop
   ]
   tick
 end
 
 to adopt
-  set adoption? (
-    adoption? or
-    (random-float 1.0 < broadcast-influence) or
-    (random-float 1.0 < (social-influence * (count turtles with [adoption?] / count turtles)))
-   )
-  if adoption? [ set color red ]
-end
+  if (random-float 1.0 < broadcast-influence) [
+    set adoption? true
+    set color red
+  ]
 
+  let neighbors-adopted link-neighbors with [adoption?]
+  if not adoption? and (
+    random-float 1.0 < (social-influence * (count neighbors-adopted / count link-neighbors))) [
+    set adoption? true
+    set color pink
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -45,8 +61,8 @@ GRAPHICS-WINDOW
 1
 1
 0
-1
-1
+0
+0
 1
 -16
 16
@@ -66,8 +82,8 @@ SLIDER
 num-agents
 num-agents
 0
-100
-100.0
+200
+104.0
 1
 1
 NIL
@@ -97,7 +113,7 @@ BUTTON
 177
 NIL
 go
-NIL
+T
 1
 T
 OBSERVER
@@ -110,14 +126,14 @@ NIL
 SLIDER
 16
 35
-195
+198
 68
 broadcast-influence
 broadcast-influence
 0
 1
-0.2
-0.1
+0.01
+0.05
 1
 NIL
 HORIZONTAL
@@ -131,11 +147,46 @@ social-influence
 social-influence
 0
 1
-0.9
+0.5
 0.1
 1
 NIL
 HORIZONTAL
+
+PLOT
+13
+189
+184
+339
+Adoptions over time
+time
+adoption
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles with [ adoption? ]"
+
+BUTTON
+86
+151
+149
+184
+reset
+reset
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
